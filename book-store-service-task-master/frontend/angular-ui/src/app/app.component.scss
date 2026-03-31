@@ -1,0 +1,23 @@
+:host {
+  display: block;
+}
+
+.page-shell {
+  width: min(860px, calc(100% - 18px));
+  margin: 10px auto 14px;
+  display: grid;
+  gap: 10px;
+}
+
+.main-layout {
+  display: grid;
+  grid-template-columns: 188px 1fr;
+  gap: 8px;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,22 @@
+<article class="book-card">
+  <button type="button" class="wishlist" aria-label="Add to wishlist">♡</button>
+
+  <img class="cover" [src]="book.coverImage" [alt]="book.title + ' cover'" />
+
+  <span class="badge">{{ book.category }}</span>
+
+  <h4>{{ book.title }}</h4>
+  <p class="author">{{ book.author }}</p>
+
+  <p class="rating">
+    <span class="stars">{{ stars }}</span>
+    <span class="score">{{ book.rating }}</span>
+  </p>
+
+  <p class="price">${{ book.price.toFixed(2) }}</p>
+
+  <div class="buttons">
+    <button type="button" class="ghost">Details</button>
+    <button type="button" class="solid">Add</button>
+  </div>
+</article>

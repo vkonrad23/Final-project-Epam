@@ -1,0 +1,72 @@
+:root {
+  --bg-base: #f7f5f2;
+  --bg-grad-start: rgba(255, 255, 255, 0.62);
+  --bg-grad-end: rgba(236, 230, 222, 0.48);
+  --text-color: #1f1f1d;
+  --noise-opacity: 0.04;
+  --noise-size: 160px;
+  --noise-image: url('/assets/noise.svg');
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-base: #1f1f1d;
+    --bg-grad-start: rgba(56, 56, 51, 0.42);
+    --bg-grad-end: rgba(20, 20, 18, 0.52);
+    --text-color: #efedea;
+    --noise-opacity: 0.055;
+  }
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--text-color);
+  background-color: var(--bg-base);
+  background-image:
+    radial-gradient(1200px 700px at 12% -8%, var(--bg-grad-start), transparent 70%),
+    radial-gradient(900px 560px at 88% 0%, var(--bg-grad-end), transparent 72%),
+    linear-gradient(180deg, var(--bg-base), var(--bg-base));
+  background-attachment: fixed;
+  position: relative;
+}
+
+/* Global soft grain overlay: subtle depth without reducing readability. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: var(--noise-opacity);
+  background-image: var(--noise-image);
+  background-repeat: repeat;
+  background-size: var(--noise-size) var(--noise-size);
+}
+
+/* Keep app content above the grain layer while preserving component contrast. */
+body > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Optional class-based theme override for apps that toggle theme manually. */
+html.theme-dark {
+  --bg-base: #1f1f1d;
+  --bg-grad-start: rgba(56, 56, 51, 0.42);
+  --bg-grad-end: rgba(20, 20, 18, 0.52);
+  --text-color: #efedea;
+  --noise-opacity: 0.055;
+}
+
+html.theme-light {
+  --bg-base: #f7f5f2;
+  --bg-grad-start: rgba(255, 255, 255, 0.62);
+  --bg-grad-end: rgba(236, 230, 222, 0.48);
+  --text-color: #1f1f1d;
+  --noise-opacity: 0.04;
+}

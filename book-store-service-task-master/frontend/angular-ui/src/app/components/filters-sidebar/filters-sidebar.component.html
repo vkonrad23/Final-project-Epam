@@ -1,0 +1,51 @@
+<aside class="filters-card">
+  <h3>Filters</h3>
+
+  <label>
+    Genre
+    <select [(ngModel)]="genre">
+      <option>All</option>
+      <option>Fiction</option>
+      <option>Sci-Fi</option>
+      <option>Business</option>
+    </select>
+  </label>
+
+  <label>
+    Language
+    <select [(ngModel)]="language">
+      <option>All</option>
+      <option>English</option>
+      <option>Ukrainian</option>
+      <option>German</option>
+    </select>
+  </label>
+
+  <label>
+    Minimum Rating
+    <input type="range" min="0" max="5" step="1" [(ngModel)]="minRating" />
+    <span class="value">{{ minRating }} stars+</span>
+  </label>
+
+  <div class="price-grid">
+    <label>
+      Min Price
+      <input type="number" [(ngModel)]="minPrice" placeholder="Min" />
+    </label>
+    <label>
+      Max Price
+      <input type="number" [(ngModel)]="maxPrice" placeholder="Max" />
+    </label>
+  </div>
+
+  <label>
+    Sort by
+    <select [(ngModel)]="sortBy">
+      <option>Popularity</option>
+      <option>Rating</option>
+      <option>Price: Low to High</option>
+    </select>
+  </label>
+
+  <button type="button" class="reset">Reset Filters</button>
+</aside>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" ng-app="bookStoreApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Store Service</title>
+    <link rel="stylesheet" href="/assets/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+</head>
+<body ng-controller="MainController as vm">
+<div class="container">
+    <header>
+        <h1>{{ vm.t('title') }}</h1>
+        <button type="button" ng-click="vm.toggleLanguage()">{{ vm.lang === 'en' ? 'UA' : 'EN' }}</button>
+    </header>
+
+    <section>
+        <h2>{{ vm.t('books') }}</h2>
+        <form name="bookForm" ng-submit="vm.addBook(bookForm)" novalidate>
+            <input type="text" name="name" ng-model="vm.newBook.name" placeholder="Name" required ng-class="{'invalid': bookForm.name.$invalid && bookForm.$submitted}">
+            <input type="text" name="author" ng-model="vm.newBook.author" placeholder="Author" required ng-class="{'invalid': bookForm.author.$invalid && bookForm.$submitted}">
+            <input type="number" name="pages" ng-model="vm.newBook.pages" placeholder="Pages" min="1" required ng-class="{'invalid': bookForm.pages.$invalid && bookForm.$submitted}">
+            <input type="number" step="0.01" name="price" ng-model="vm.newBook.price" placeholder="Price" min="0.01" required ng-class="{'invalid': bookForm.price.$invalid && bookForm.$submitted}">
+            <button type="submit">{{ vm.t('addBook') }}</button>
+        </form>
+        <ul>
+            <li ng-repeat="book in vm.books track by $index">{{ book.name }} - {{ book.author }} (${{ book.price }})</li>
+        </ul>
+    </section>
+
+    <p class="error" ng-if="vm.error">{{ vm.error }}</p>
+</div>
+
+<script src="/assets/app.js"></script>
+</body>
+</html>

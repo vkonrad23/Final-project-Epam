@@ -1,0 +1,61 @@
+.hero-card {
+  background: #fff;
+  border: 1px solid #ebe5dd;
+  border-radius: 12px;
+  box-shadow: 0 8px 14px rgba(49, 38, 23, 0.04);
+  padding: 10px 12px;
+  display: grid;
+  grid-template-columns: 1.28fr 0.72fr;
+  gap: 8px;
+  min-height: 248px;
+}
+
+.hero-copy h1 {
+  margin: 0;
+  font-size: clamp(46px, 6vw, 48px);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: #1c2432;
+}
+
+.hero-copy p {
+  margin: 8px 0 0;
+  max-width: 315px;
+  font-size: 11px;
+  line-height: 1.55;
+  color: #7c8696;
+}
+
+.hero-pills {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.hero-pills button {
+  border: 1px solid #e7dfd5;
+  background: #f5f5f4;
+  color: #6c7481;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 6px 10px;
+}
+
+.hero-pills button:first-child {
+  background: #2f5b97;
+  border-color: #2f5b97;
+  color: #fff;
+}
+
+.hero-featured {
+  align-self: center;
+}
+
+@media (max-width: 900px) {
+  .hero-card {
+    grid-template-columns: 1fr;
+    padding: 14px;
+  }
+}

@@ -1,0 +1,12 @@
+<section class="catalog-card">
+  <header>
+    <h3>Catalog</h3>
+    <span>{{ books.length }} results</span>
+  </header>
+
+  <div class="grid">
+    @for (book of books; track book.id) {
+      <app-book-card [book]="book"></app-book-card>
+    }
+  </div>
+</section>

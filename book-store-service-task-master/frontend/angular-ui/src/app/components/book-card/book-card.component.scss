@@ -1,0 +1,101 @@
+.book-card {
+  position: relative;
+  background: #fff;
+  border: 1px solid #eee7de;
+  border-radius: 10px;
+  padding: 8px;
+}
+
+.wishlist {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid #e8dfd4;
+  background: #fff;
+  color: #7f7569;
+  font-size: 12px;
+}
+
+.cover {
+  width: 100%;
+  height: 116px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.badge {
+  display: inline-block;
+  margin-top: 6px;
+  border: 1px solid #ece4da;
+  border-radius: 999px;
+  padding: 2px 7px;
+  font-size: 9px;
+  color: #796f63;
+  background: #f9f6f1;
+}
+
+h4 {
+  margin: 6px 0 0;
+  font-size: 11px;
+  line-height: 1.35;
+  color: #1f1a16;
+}
+
+.author {
+  margin: 2px 0 0;
+  font-size: 9px;
+  color: #8a8074;
+}
+
+.rating {
+  margin: 6px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+}
+
+.stars {
+  color: #f2b94b;
+  letter-spacing: 0.04em;
+}
+
+.score {
+  color: #7f7569;
+}
+
+.price {
+  margin: 4px 0 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #1f2a3a;
+}
+
+.buttons {
+  margin-top: 6px;
+  display: flex;
+  gap: 6px;
+}
+
+.buttons button {
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border: 1px solid #e6ddd2;
+}
+
+.buttons .ghost {
+  background: #315d98;
+  border-color: #315d98;
+  color: #fff;
+}
+
+.buttons .solid {
+  background: #315d98;
+  border-color: #315d98;
+  color: #fff;
+}

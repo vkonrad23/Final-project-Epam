@@ -1,0 +1,65 @@
+.filters-card {
+  background: #fff;
+  border: 1px solid #ece5dc;
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 8px 14px rgba(47, 37, 25, 0.04);
+}
+
+h3 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #253043;
+}
+
+label {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+  color: #5f6b7b;
+  margin-bottom: 8px;
+}
+
+select,
+input[type='number'] {
+  width: 100%;
+  margin-top: 6px;
+  border: 1px solid #e7dfd5;
+  background: #fcfaf7;
+  border-radius: 7px;
+  height: 29px;
+  padding: 0 8px;
+  color: #3e352b;
+  font-size: 10px;
+}
+
+input[type='range'] {
+  width: 100%;
+  margin-top: 8px;
+  accent-color: #8c7f6e;
+}
+
+.value {
+  display: inline-block;
+  margin-top: 2px;
+  font-size: 9px;
+  color: #8a7f73;
+}
+
+.price-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.reset {
+  width: 100%;
+  margin-top: 6px;
+  border: 1px solid #e3dbd0;
+  border-radius: 999px;
+  background: #f8f3ec;
+  color: #3e352c;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 7px;
+}
