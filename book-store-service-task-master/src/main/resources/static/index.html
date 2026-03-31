@@ -3,32 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Store Service</title>
+    <title>Bookhaus | Discover Your Next Favorite Book</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/styles.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
 </head>
 <body ng-controller="MainController as vm">
-<div class="container">
-    <header>
-        <h1>{{ vm.t('title') }}</h1>
-        <button type="button" ng-click="vm.toggleLanguage()">{{ vm.lang === 'en' ? 'UA' : 'EN' }}</button>
+<div class="page-shell">
+    <header class="top-nav" aria-label="Main header">
+        <div class="brand-block" aria-label="Bookhaus">
+            <span class="brand-mark" aria-hidden="true">BK</span>
+            <span class="brand-name">Bookhaus</span>
+        </div>
+
+        <nav class="nav-links" aria-label="Primary">
+            <a href="#catalog">Catalog</a>
+            <a href="#featured">Trending</a>
+            <a href="#add-book">Add Book</a>
+        </nav>
+
+        <div class="nav-actions">
+            <form class="auth-form" name="loginForm" ng-submit="vm.login(loginForm)" novalidate aria-label="Login form">
+                <label for="login-email" class="sr-only">Email</label>
+                <input id="login-email" type="email" name="email" ng-model="vm.credentials.username" placeholder="Email" required>
+
+                <label for="login-password" class="sr-only">Password</label>
+                <input id="login-password" type="password" name="password" ng-model="vm.credentials.password" placeholder="Password" required>
+
+                <button type="submit" class="primary-btn small">Login</button>
+                <button type="button" class="ghost-btn" ng-click="vm.logout()">Logout</button>
+            </form>
+
+            <button type="button" class="lang-btn" ng-click="vm.toggleLanguage()" aria-label="Toggle language">
+                {{ vm.lang === 'en' ? 'UA' : 'EN' }}
+            </button>
+        </div>
     </header>
 
-    <section>
-        <h2>{{ vm.t('books') }}</h2>
-        <form name="bookForm" ng-submit="vm.addBook(bookForm)" novalidate>
-            <input type="text" name="name" ng-model="vm.newBook.name" placeholder="Name" required ng-class="{'invalid': bookForm.name.$invalid && bookForm.$submitted}">
-            <input type="text" name="author" ng-model="vm.newBook.author" placeholder="Author" required ng-class="{'invalid': bookForm.author.$invalid && bookForm.$submitted}">
-            <input type="number" name="pages" ng-model="vm.newBook.pages" placeholder="Pages" min="1" required ng-class="{'invalid': bookForm.pages.$invalid && bookForm.$submitted}">
-            <input type="number" step="0.01" name="price" ng-model="vm.newBook.price" placeholder="Price" min="0.01" required ng-class="{'invalid': bookForm.price.$invalid && bookForm.$submitted}">
-            <button type="submit">{{ vm.t('addBook') }}</button>
-        </form>
-        <ul>
-            <li ng-repeat="book in vm.books track by $index">{{ book.name }} - {{ book.author }} (${{ book.price }})</li>
-        </ul>
+    <p class="auth-status" ng-if="vm.authMessage">{{ vm.authMessage }}</p>
+
+    <main>
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-copy">
+                <p class="eyebrow">Curated collections for mindful readers</p>
+                <h1 id="hero-title">Discover Your Next Favorite Book</h1>
+                <p class="hero-subtitle">
+                    Explore handpicked fiction, timeless classics, and contemporary voices in a premium bookstore experience.
+                </p>
+
+                <form class="hero-search" role="search" ng-submit="$event.preventDefault()" aria-label="Search books">
+                    <label for="search-input" class="sr-only">Search books</label>
+                    <input id="search-input" type="search" ng-model="vm.searchQuery" placeholder="Search by title or author">
+
+                    <label for="genre-filter" class="sr-only">Filter by genre</label>
+                    <select id="genre-filter" ng-model="vm.selectedGenre">
+                        <option value="">All genres</option>
+                        <option ng-repeat="genre in vm.genres track by genre" value="{{ genre }}">{{ genre }}</option>
+                    </select>
+                </form>
+            </div>
+
+            <aside class="hero-featured" id="featured" aria-label="Trending books">
+                <h2>Trending This Week</h2>
+                <article class="featured-item" ng-repeat="book in vm.getFeaturedBooks() track by $index">
+                    <div class="cover-swatch cover-clickable" ng-style="vm.getBookCoverStyle(book)" ng-click="vm.openCoverViewer(book)" role="button" tabindex="0" aria-label="Open full cover for {{ book.name }}"></div>
+                    <div>
+                        <h3>{{ book.name }}</h3>
+                        <p>{{ book.author }}</p>
+                    </div>
+                    <span class="chip">{{ book.genre || 'General' }}</span>
+                </article>
+            </aside>
+        </section>
+
+        <section class="content-grid">
+            <aside class="add-panel" id="add-book" aria-labelledby="add-book-title">
+                <h2 id="add-book-title">{{ vm.t('addBook') }}</h2>
+                <p>Add a new title to the catalog with clean metadata.</p>
+
+                <form name="bookForm" ng-submit="vm.addBook(bookForm)" novalidate>
+                    <label for="book-name">Book Name</label>
+                    <input id="book-name" type="text" name="name" ng-model="vm.newBook.name" required ng-class="{'invalid': bookForm.name.$invalid && bookForm.$submitted}">
+
+                    <label for="book-author">Author</label>
+                    <input id="book-author" type="text" name="author" ng-model="vm.newBook.author" required ng-class="{'invalid': bookForm.author.$invalid && bookForm.$submitted}">
+
+                    <div class="input-row">
+                        <div>
+                            <label for="book-pages">Pages</label>
+                            <input id="book-pages" type="number" name="pages" min="1" ng-model="vm.newBook.pages" required ng-class="{'invalid': bookForm.pages.$invalid && bookForm.$submitted}">
+                        </div>
+                        <div>
+                            <label for="book-price">Price</label>
+                            <input id="book-price" type="number" name="price" step="0.01" min="0.01" ng-model="vm.newBook.price" required ng-class="{'invalid': bookForm.price.$invalid && bookForm.$submitted}">
+                        </div>
+                    </div>
+
+                    <label for="book-genre">Genre</label>
+                    <input id="book-genre" type="text" name="genre" ng-model="vm.newBook.genre" required ng-class="{'invalid': bookForm.genre.$invalid && bookForm.$submitted}" placeholder="General">
+
+                    <button class="primary-btn" type="submit">{{ vm.t('addBook') }}</button>
+                </form>
+            </aside>
+
+            <section class="catalog-panel" id="catalog" aria-labelledby="catalog-title">
+                <div class="catalog-header">
+                    <h2 id="catalog-title">{{ vm.t('books') }}</h2>
+                    <span>{{ vm.getFilteredBooks().length }} results</span>
+                </div>
+
+                <div class="cart-bar">
+                    <span>Cart: {{ vm.cart.items.length }} book(s)</span>
+                    <strong>${{ vm.cart.total | number:2 }}</strong>
+                    <button type="button" class="primary-btn small" ng-click="vm.checkout()" ng-disabled="!vm.cart.items.length">Buy Now</button>
+                </div>
+
+                <div class="book-grid">
+                    <article class="book-card" ng-repeat="book in vm.getFilteredBooks() track by $index">
+                        <div class="book-cover cover-clickable" ng-style="vm.getBookCoverStyle(book)" ng-click="vm.openCoverViewer(book)" role="button" tabindex="0" aria-label="Open full cover for {{ book.name }}"></div>
+                        <p class="book-genre">{{ book.genre || 'General' }}</p>
+                        <h3>{{ book.name }}</h3>
+                        <p class="book-author">{{ book.author }}</p>
+                        <p class="book-meta">{{ book.pages || 'N/A' }} pages</p>
+                        <div class="book-row">
+                            <strong>${{ book.price }}</strong>
+                            <div class="book-actions">
+                                <button type="button" class="ghost-btn" ng-click="vm.showDetails(book)">Details</button>
+                                <button type="button" class="primary-btn small" ng-click="vm.addToCart(book)">Add</button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <section class="cart-panel" ng-if="vm.cart.items.length" aria-label="Shopping cart">
+        <h2>Selected Books</h2>
+        <div class="cart-item" ng-repeat="item in vm.cart.items track by $index">
+            <span>{{ item.name }}</span>
+            <span>${{ item.price }}</span>
+            <button type="button" class="ghost-btn" ng-click="vm.removeFromCart($index)">Remove</button>
+        </div>
     </section>
 
-    <p class="error" ng-if="vm.error">{{ vm.error }}</p>
+    <div class="modal-backdrop" ng-if="vm.selectedBook" ng-click="vm.closeDetails()"></div>
+    <section class="book-modal" ng-if="vm.selectedBook" role="dialog" aria-modal="true" aria-label="Book details">
+        <button type="button" class="modal-close" ng-click="vm.closeDetails()" aria-label="Close details">&times;</button>
+        <div class="book-cover large cover-clickable" ng-style="vm.getBookCoverStyle(vm.selectedBook)" ng-click="vm.openCoverViewer(vm.selectedBook)" role="button" tabindex="0" aria-label="Open full cover for {{ vm.selectedBook.name }}"></div>
+        <h2>{{ vm.selectedBook.name }}</h2>
+        <p class="book-author">{{ vm.selectedBook.author }}</p>
+        <p class="book-meta">Genre: {{ vm.selectedBook.genre || 'General' }} | Pages: {{ vm.selectedBook.pages || 'N/A' }}</p>
+        <p>{{ vm.selectedBook.description || 'No description available for this book yet.' }}</p>
+        <div class="book-actions">
+            <button type="button" class="primary-btn small" ng-click="vm.addToCart(vm.selectedBook)">Add to Cart</button>
+            <button type="button" class="ghost-btn" ng-click="vm.closeDetails()">Close</button>
+        </div>
+    </section>
+
+    <div class="modal-backdrop" ng-if="vm.selectedCoverUrl" ng-click="vm.closeCoverViewer()"></div>
+    <section class="cover-viewer" ng-if="vm.selectedCoverUrl" role="dialog" aria-modal="true" aria-label="Full book cover">
+        <button type="button" class="modal-close" ng-click="vm.closeCoverViewer()" aria-label="Close full cover">&times;</button>
+        <h3>{{ vm.selectedCoverTitle }}</h3>
+        <img class="cover-viewer-image" ng-src="{{ vm.selectedCoverUrl }}" alt="{{ vm.selectedCoverTitle }} full cover">
+    </section>
+
+    <footer class="site-footer">
+        <p>Bookhaus, premium online bookstore experience.</p>
+        <small>&copy; {{ vm.currentYear }} Bookhaus</small>
+    </footer>
+
+    <p class="error" role="alert" ng-if="vm.error">{{ vm.error }}</p>
 </div>
 
 <script src="/assets/app.js"></script>
