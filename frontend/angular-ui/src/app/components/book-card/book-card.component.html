@@ -1,0 +1,26 @@
+<!-- This file defines the HTML structure and semantic layout of the view. -->
+<article class="book-card">
+  <button type="button" class="wishlist" aria-label="Add to wishlist">♡</button>
+
+  <img class="cover" [src]="book.coverImage" [alt]="book.title + ' cover'" />
+
+  <span class="badge">{{ book.category }}</span>
+
+  <h4>{{ book.title }}</h4>
+  <p class="author">{{ book.author }}</p>
+
+  <p class="rating">
+    <span class="stars">{{ stars }}</span>
+    <span class="score">{{ book.rating }}</span>
+  </p>
+
+  <div class="bottom-row">
+    <p class="price">${{ book.price.toFixed(2) }}</p>
+  </div>
+
+  <div class="actions-row">
+    <button type="button" class="btn btn-ghost">View details</button>
+    <button type="button" class="btn btn-secondary" (click)="onAddToCart()">Add to cart</button>
+  </div>
+</article>
+

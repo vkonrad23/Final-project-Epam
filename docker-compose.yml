@@ -1,0 +1,23 @@
+# This file defines YAML configuration for services/build/deployment.
+# File purpose: contains YAML configuration blocks.
+version: "3.9"
+# Block: defines a configuration section below.
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: bookstore
+      POSTGRES_USER: bookstore
+      POSTGRES_PASSWORD: bookstore
+
+  app:
+    build: .
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/bookstore
+      DB_USER: bookstore
+      DB_PASSWORD: bookstore
+    ports:
+      - "8084:8084"
+    depends_on:
+      - db
+

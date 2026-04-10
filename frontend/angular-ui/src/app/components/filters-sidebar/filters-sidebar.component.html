@@ -1,0 +1,79 @@
+<!-- This file defines the HTML structure and semantic layout of the view. -->
+<aside class="filters-card">
+  <h3>Add New Book</h3>
+  <p class="subtitle">Extend your catalog with a polished, complete listing.</p>
+
+  <form class="book-form" (ngSubmit)="saveBook()">
+    <label>
+      Title
+      <input
+          class="input-field"
+        type="text"
+        name="title"
+        [(ngModel)]="formModel.title"
+        placeholder="e.g., The Midnight Library"
+        [class.invalid]="isSubmitted && !formModel.title"
+      />
+      <small *ngIf="isSubmitted && !formModel.title">Title is required.</small>
+    </label>
+
+    <label>
+      Author
+      <input
+          class="input-field"
+        type="text"
+        name="author"
+        [(ngModel)]="formModel.author"
+        placeholder="e.g., Matt Haig"
+        [class.invalid]="isSubmitted && !formModel.author"
+      />
+      <small *ngIf="isSubmitted && !formModel.author">Author is required.</small>
+    </label>
+
+    <div class="row">
+      <label>
+        Category
+        <input
+          class="input-field"
+          type="text"
+          name="category"
+          [(ngModel)]="formModel.category"
+          placeholder="e.g., Fiction"
+          [class.invalid]="isSubmitted && !formModel.category"
+        />
+      </label>
+
+      <label>
+        Price
+        <input
+          class="input-field"
+          type="number"
+          name="price"
+          [(ngModel)]="formModel.price"
+          placeholder="e.g., 19.99"
+          min="0.01"
+          step="0.01"
+          [class.invalid]="isSubmitted && !formModel.price"
+        />
+      </label>
+    </div>
+
+    <small *ngIf="isSubmitted && (!formModel.category || !formModel.price)">Category and price are required.</small>
+
+    <label>
+      Cover image URL
+      <input
+        class="input-field"
+        type="url"
+        name="coverImage"
+        [(ngModel)]="formModel.coverImage"
+        placeholder="Optional: https://..."
+      />
+    </label>
+
+    <div class="form-footer">
+      <button type="submit" class="submit btn-secondary">Add Book</button>
+    </div>
+  </form>
+</aside>
+

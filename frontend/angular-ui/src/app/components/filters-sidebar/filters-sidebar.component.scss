@@ -1,0 +1,116 @@
+/* This file defines SCSS styles used to present and organize the UI. */
+.filters-card {
+  background: #fff;
+  border: 1px solid #e8dece;
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: 0 14px 24px rgba(47, 37, 25, 0.08);
+}
+
+h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #26384d;
+}
+
+.subtitle {
+  margin: 6px 0 14px;
+  color: #7f8999;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.book-form {
+  display: grid;
+  gap: 12px;
+}
+
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #5a4d40;
+}
+
+input[type='text'],
+input[type='url'],
+input[type='number'] {
+  width: 100%;
+  margin-top: 6px;
+  border: 1px solid #dacdbc;
+  background: #fefcf9;
+  border-radius: 12px;
+  min-height: 40px;
+  padding: 10px 12px;
+  color: #3a3128;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+input:focus {
+  border-color: #4f7399;
+  box-shadow: 0 0 0 3px rgba(79, 115, 153, 0.18);
+}
+
+input.invalid {
+  border-color: #c43f3b;
+  background: #fff5f4;
+}
+
+small {
+  display: block;
+  margin-top: 4px;
+  color: #c43f3b;
+  font-size: 11px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.submit {
+  width: auto;
+  min-width: 130px;
+  margin-top: 2px;
+  border: 1px solid #2a4d73;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #2a4d73, #3e6998);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 10px;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+  outline: none;
+}
+
+.submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 16px rgba(47, 37, 25, 0.14);
+}
+
+.submit:focus-visible {
+  box-shadow: 0 0 0 3px rgba(42, 77, 115, 0.28);
+}
+
+.form-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 680px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+
+  .form-footer {
+    justify-content: stretch;
+  }
+
+  .submit {
+    width: 100%;
+  }
+}
+

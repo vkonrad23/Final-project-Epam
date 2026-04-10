@@ -1,0 +1,89 @@
+<!-- This file defines the HTML structure and semantic layout of the view. -->
+<header class="nav-shell">
+  <div class="nav-main">
+    <div class="brand">
+      <span class="brand-mark">BK</span>
+      <span class="brand-text">Bookhouse</span>
+    </div>
+
+    <nav class="links">
+      <a href="#">Catalog</a>
+      <a href="#">Trending</a>
+      <a href="#" class="no-wrap">Add Book</a>
+    </nav>
+
+    <div class="actions" *ngIf="!isAuthenticated">
+      <button type="button" class="btn-secondary" (click)="openAuth('login')">Login</button>
+      <button type="button" class="btn-primary" (click)="openAuth('signup')">Sign Up</button>
+    </div>
+
+    <div class="actions" *ngIf="isAuthenticated">
+      <span class="account-chip">
+        <span class="avatar">{{ (accountEmail || 'U').charAt(0).toUpperCase() }}</span>
+        <span class="account-text">{{ accountEmail || 'Signed in' }}</span>
+      </span>
+      <button type="button" class="btn-ghost" (click)="logout()">Logout</button>
+    </div>
+  </div>
+
+  <button
+    type="button"
+    class="auth-backdrop"
+    *ngIf="isAuthPanelOpen"
+    aria-label="Close authentication panel"
+    (click)="closeAuth()"
+  ></button>
+
+  <div class="auth-panel" *ngIf="isAuthPanelOpen">
+    <div class="panel-head">
+      <div class="mode-tabs">
+        <button type="button" [class.active]="authMode === 'login'" (click)="switchAuthMode('login')">Login</button>
+        <button type="button" [class.active]="authMode === 'signup'" (click)="switchAuthMode('signup')">Sign Up</button>
+      </div>
+      <button type="button" class="close-btn" (click)="closeAuth()" aria-label="Close authentication panel">×</button>
+    </div>
+
+    <form class="auth-form" *ngIf="authMode === 'login'" (ngSubmit)="login()">
+      <label>
+        Email
+        <input class="input-field" type="email" name="loginEmail" [(ngModel)]="loginModel.email" placeholder="you@example.com" required />
+      </label>
+
+      <label>
+        Password
+        <input class="input-field" type="password" name="loginPassword" [(ngModel)]="loginModel.password" placeholder="Your password" required />
+      </label>
+
+      <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Signing in...' : 'Sign in' }}
+      </button>
+    </form>
+
+    <form class="auth-form" *ngIf="authMode === 'signup'" (ngSubmit)="register()">
+      <label>
+        Full name
+        <input class="input-field" type="text" name="signupName" [(ngModel)]="signUpModel.name" placeholder="Your name" required />
+      </label>
+
+      <label>
+        Email
+        <input class="input-field" type="email" name="signupEmail" [(ngModel)]="signUpModel.email" placeholder="you@example.com" required />
+      </label>
+
+      <label>
+        Password
+        <input class="input-field" type="password" name="signupPassword" [(ngModel)]="signUpModel.password" placeholder="Strong password" required />
+      </label>
+
+      <button type="submit" class="btn-primary" [disabled]="isSubmitting">
+        {{ isSubmitting ? 'Creating account...' : 'Create account' }}
+      </button>
+    </form>
+
+    <div class="messages">
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <p class="success" *ngIf="successMessage">{{ successMessage }}</p>
+    </div>
+  </div>
+</header>
+

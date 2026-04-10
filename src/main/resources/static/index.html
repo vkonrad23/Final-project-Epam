@@ -1,0 +1,228 @@
+<!-- This file defines the HTML structure and semantic layout of the view. -->
+<!doctype html>
+<html lang="en" ng-app="bookStoreApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookhouse | Discover Your Next Favorite Book</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+</head>
+<body ng-controller="MainController as vm">
+<div class="page-shell">
+    <header class="top-nav" aria-label="Main header">
+        <div class="brand-block" aria-label="Bookhouse">
+            <span class="brand-mark" aria-hidden="true">BK</span>
+            <span class="brand-name">Bookhouse</span>
+        </div>
+
+        <nav class="nav-links" aria-label="Primary">
+            <a href="#catalog">{{ vm.t('catalog') }}</a>
+            <a href="#featured">{{ vm.t('trending') }}</a>
+            <a href="#add-book">{{ vm.t('addBook') }}</a>
+        </nav>
+
+        <div class="nav-actions">
+            <form class="auth-form" name="loginForm" ng-submit="vm.login(loginForm)" novalidate aria-label="Login form">
+                <label for="login-email" class="sr-only">Email</label>
+                <input id="login-email" type="email" name="email" ng-model="vm.credentials.username" placeholder="{{ vm.t('email') }}" required ng-class="{'invalid': loginForm.$submitted && loginForm.email.$invalid}">
+
+                <label for="login-password" class="sr-only">Password</label>
+                <input id="login-password" type="password" name="password" ng-model="vm.credentials.password" placeholder="{{ vm.t('password') }}" required ng-class="{'invalid': loginForm.$submitted && loginForm.password.$invalid}">
+
+                <button type="submit" class="primary-btn small">{{ vm.t('login') }}</button>
+                <button type="button" class="ghost-btn" ng-click="vm.logout()">{{ vm.t('logout') }}</button>
+            </form>
+
+            <form class="auth-form signup-form" name="signupForm" ng-submit="vm.signup(signupForm)" novalidate aria-label="Sign up form">
+                <label for="signup-name" class="sr-only">Name</label>
+                <input id="signup-name" type="text" name="name" ng-model="vm.signupData.name" placeholder="{{ vm.t('name') }}" required ng-class="{'invalid': signupForm.$submitted && signupForm.name.$invalid}">
+
+                <label for="signup-email" class="sr-only">Email</label>
+                <input id="signup-email" type="email" name="email" ng-model="vm.signupData.email" placeholder="{{ vm.t('email') }}" required ng-class="{'invalid': signupForm.$submitted && signupForm.email.$invalid}">
+
+                <label for="signup-password" class="sr-only">Password</label>
+                <input id="signup-password" type="password" name="password" ng-model="vm.signupData.password" placeholder="{{ vm.t('password') }}" required ng-class="{'invalid': signupForm.$submitted && signupForm.password.$invalid}">
+
+                <button type="submit" class="primary-btn small">{{ vm.t('signUp') }}</button>
+            </form>
+
+            <button type="button" class="lang-btn" ng-click="vm.toggleLanguage()" aria-label="Toggle language">
+                {{ vm.lang === 'en' ? 'UA' : 'EN' }}
+            </button>
+        </div>
+    </header>
+
+    <p class="auth-status" ng-if="vm.authMessage">{{ vm.authMessage }}</p>
+
+    <section class="cart-panel" ng-if="vm.isAuthenticated" aria-label="Account tools">
+        <h2>{{ vm.t('accountTools') }}</h2>
+        <form name="changePasswordForm" ng-submit="vm.changePassword(changePasswordForm)" novalidate>
+            <div class="input-row">
+                <div>
+                    <label for="current-password">{{ vm.t('currentPassword') }}</label>
+                    <input id="current-password" type="password" name="currentPassword" ng-model="vm.passwordChangeData.currentPassword" required>
+                </div>
+                <div>
+                    <label for="new-password">{{ vm.t('newPassword') }}</label>
+                    <input id="new-password" type="password" name="newPassword" ng-model="vm.passwordChangeData.newPassword" required>
+                </div>
+            </div>
+            <button type="submit" class="primary-btn small">{{ vm.t('changePassword') }}</button>
+        </form>
+    </section>
+
+    <section class="cart-panel" ng-if="vm.isAuthenticated && vm.isAdmin()" aria-label="Admin orders">
+        <h2>{{ vm.t('adminOrders') }}</h2>
+        <div class="cart-item" ng-repeat="order in vm.adminOrders track by $index">
+            <span>{{ vm.t('orderBy') }}: {{ order.clientEmail }}</span>
+            <span>{{ vm.t('orderHandledBy') }}: {{ order.employeeEmail }}</span>
+            <span>{{ vm.t('orderTotal') }}: ${{ order.price }}</span>
+            <span>{{ vm.t('orderDate') }}: {{ order.orderDate | date:'yyyy-MM-dd HH:mm' }}</span>
+        </div>
+        <p ng-if="!vm.adminOrders.length">{{ vm.t('noOrders') }}</p>
+    </section>
+
+    <main>
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-copy">
+                <p class="eyebrow">{{ vm.t('eyebrow') }}</p>
+                <h1 id="hero-title">{{ vm.t('heroTitle') }}</h1>
+                <p class="hero-subtitle">
+                    {{ vm.t('heroSubtitle') }}
+                </p>
+
+                <form class="hero-search" role="search" ng-submit="$event.preventDefault()" aria-label="Search books">
+                    <label for="search-input" class="sr-only">Search books</label>
+                    <input id="search-input" type="search" ng-model="vm.searchQuery" placeholder="{{ vm.t('searchPlaceholder') }}">
+
+                    <label for="genre-filter" class="sr-only">Filter by genre</label>
+                    <select id="genre-filter" ng-model="vm.selectedGenre">
+                        <option value="">{{ vm.t('allGenres') }}</option>
+                        <option ng-repeat="genre in vm.genres track by genre" value="{{ genre }}">{{ vm.getGenreLabel(genre) }}</option>
+                    </select>
+                </form>
+            </div>
+
+            <aside class="hero-featured" id="featured" aria-label="Trending books">
+                <h2>{{ vm.t('trendingWeek') }}</h2>
+                <article class="featured-item" ng-repeat="book in vm.getFeaturedBooks() track by $index">
+                    <div class="cover-swatch cover-clickable" ng-style="vm.getBookCoverStyle(book)" ng-click="vm.openCoverViewer(book)" role="button" tabindex="0" aria-label="Open full cover for {{ book.name }}"></div>
+                    <div>
+                        <h3>{{ book.name }}</h3>
+                        <p>{{ book.author }}</p>
+                    </div>
+                    <span class="chip">{{ vm.getGenreLabel(book.genre) }}</span>
+                </article>
+            </aside>
+        </section>
+
+        <section class="content-grid">
+            <aside class="add-panel" id="add-book" aria-labelledby="add-book-title">
+                <h2 id="add-book-title">{{ vm.t('addBook') }}</h2>
+                <p>{{ vm.t('addBookSubtitle') }}</p>
+
+                <form name="bookForm" ng-submit="vm.addBook(bookForm)" novalidate>
+                    <label for="book-name">{{ vm.t('bookName') }}</label>
+                    <input id="book-name" type="text" name="name" ng-model="vm.newBook.name" required ng-class="{'invalid': bookForm.name.$invalid && bookForm.$submitted}">
+
+                    <label for="book-author">{{ vm.t('author') }}</label>
+                    <input id="book-author" type="text" name="author" ng-model="vm.newBook.author" required ng-class="{'invalid': bookForm.author.$invalid && bookForm.$submitted}">
+
+                    <div class="input-row">
+                        <div>
+                            <label for="book-pages">{{ vm.t('pages') }}</label>
+                            <input id="book-pages" type="number" name="pages" min="1" ng-model="vm.newBook.pages" required ng-class="{'invalid': bookForm.pages.$invalid && bookForm.$submitted}">
+                        </div>
+                        <div>
+                            <label for="book-price">{{ vm.t('price') }}</label>
+                            <input id="book-price" type="number" name="price" step="0.01" min="0.01" ng-model="vm.newBook.price" required ng-class="{'invalid': bookForm.price.$invalid && bookForm.$submitted}">
+                        </div>
+                    </div>
+
+                    <label for="book-genre">{{ vm.t('genre') }}</label>
+                    <input id="book-genre" type="text" name="genre" ng-model="vm.newBook.genre" required ng-class="{'invalid': bookForm.genre.$invalid && bookForm.$submitted}" placeholder="{{ vm.t('general') }}">
+
+                    <button class="primary-btn" type="submit">{{ vm.t('addBook') }}</button>
+                </form>
+            </aside>
+
+            <section class="catalog-panel" id="catalog" aria-labelledby="catalog-title">
+                <div class="catalog-header">
+                    <h2 id="catalog-title">{{ vm.t('books') }}</h2>
+                    <span>{{ vm.getFilteredBooks().length }} {{ vm.t('results') }}</span>
+                </div>
+
+                <div class="cart-bar">
+                    <span>{{ vm.t('cart') }}: {{ vm.cart.items.length }} {{ vm.t('booksCount') }}</span>
+                    <span ng-if="vm.isAuthenticated && vm.credentials.username">{{ vm.t('purchasingAs') }}: {{ vm.credentials.username }}</span>
+                    <strong>${{ vm.cart.total | number:2 }}</strong>
+                    <button type="button" class="ghost-btn" ng-click="vm.removeLastFromCart()" ng-disabled="!vm.cart.items.length">{{ vm.t('remove') }}</button>
+                    <button type="button" class="primary-btn small" ng-click="vm.checkout()" ng-disabled="!vm.cart.items.length">{{ vm.t('buyNow') }}</button>
+                </div>
+
+                <div class="book-grid">
+                    <article class="book-card" ng-repeat="book in vm.getFilteredBooks() track by $index">
+                        <div class="book-cover cover-clickable" ng-style="vm.getBookCoverStyle(book)" ng-click="vm.openCoverViewer(book)" role="button" tabindex="0" aria-label="Open full cover for {{ book.name }}"></div>
+                        <p class="book-genre">{{ vm.getGenreLabel(book.genre) }}</p>
+                        <h3>{{ book.name }}</h3>
+                        <p class="book-author">{{ book.author }}</p>
+                        <p class="book-meta">{{ book.pages || vm.t('na') }} {{ vm.t('pages') }}</p>
+                        <div class="book-row">
+                            <strong>${{ book.price }}</strong>
+                            <div class="book-actions">
+                                <button type="button" class="ghost-btn" ng-click="vm.showDetails(book)">{{ vm.t('details') }}</button>
+                                <button type="button" class="primary-btn small" ng-click="vm.addToCart(book)">{{ vm.t('add') }}</button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <section class="cart-panel" ng-if="vm.cart.items.length" aria-label="Shopping cart">
+        <h2>{{ vm.t('selectedBooks') }}</h2>
+        <div class="cart-item" ng-repeat="item in vm.cart.items track by $index">
+            <span>{{ item.name }}</span>
+            <span>${{ item.price }}</span>
+            <button type="button" class="ghost-btn" ng-click="vm.deleteBookFromCart(item)">{{ vm.t('remove') }}</button>
+        </div>
+    </section>
+
+    <div class="modal-backdrop" ng-if="vm.selectedBook" ng-click="vm.closeDetails()"></div>
+    <section class="book-modal" ng-if="vm.selectedBook" role="dialog" aria-modal="true" aria-label="Book details">
+        <button type="button" class="modal-close" ng-click="vm.closeDetails()" aria-label="Close details">&times;</button>
+        <div class="book-cover large cover-clickable" ng-style="vm.getBookCoverStyle(vm.selectedBook)" ng-click="vm.openCoverViewer(vm.selectedBook)" role="button" tabindex="0" aria-label="Open full cover for {{ vm.selectedBook.name }}"></div>
+        <h2>{{ vm.selectedBook.name }}</h2>
+        <p class="book-author">{{ vm.selectedBook.author }}</p>
+        <p class="book-meta">{{ vm.t('genre') }}: {{ vm.getGenreLabel(vm.selectedBook.genre) }} | {{ vm.t('pages') }}: {{ vm.selectedBook.pages || vm.t('na') }}</p>
+        <p>{{ vm.selectedBook.description || vm.t('noDescription') }}</p>
+        <div class="book-actions">
+            <button type="button" class="primary-btn small" ng-click="vm.addToCart(vm.selectedBook)">{{ vm.t('addToCart') }}</button>
+            <button type="button" class="ghost-btn" ng-click="vm.closeDetails()">{{ vm.t('close') }}</button>
+        </div>
+    </section>
+
+    <div class="modal-backdrop" ng-if="vm.selectedCoverUrl" ng-click="vm.closeCoverViewer()"></div>
+    <section class="cover-viewer" ng-if="vm.selectedCoverUrl" role="dialog" aria-modal="true" aria-label="Full book cover">
+        <button type="button" class="modal-close" ng-click="vm.closeCoverViewer()" aria-label="Close full cover">&times;</button>
+        <h3>{{ vm.selectedCoverTitle }}</h3>
+        <img class="cover-viewer-image" ng-src="{{ vm.selectedCoverUrl }}" alt="{{ vm.selectedCoverTitle }} full cover">
+    </section>
+
+    <footer class="site-footer">
+        <p>{{ vm.t('footerTagline') }}</p>
+        <small>&copy; {{ vm.currentYear }} Bookhouse</small>
+    </footer>
+
+    <p class="error" role="alert" ng-if="vm.error">{{ vm.error }}</p>
+</div>
+
+<script src="/assets/app.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,45 @@
+<!-- This file defines the HTML structure and semantic layout of the view. -->
+<section class="hero-card">
+  <div class="hero-copy">
+    <p class="eyebrow">Bookhouse Curated</p>
+    <h1>Discover Your Next Favorite Book</h1>
+    <p>
+      Explore handpicked fiction, timeless classics, and contemporary voices in an elegant bookstore experience.
+    </p>
+
+    <div class="hero-controls">
+      <label>
+        Search
+        <input
+          class="input-field"
+          type="search"
+          placeholder="Search by title or author"
+          [(ngModel)]="searchText"
+          (ngModelChange)="onSearchChange()"
+        />
+      </label>
+
+      <label>
+        Genre
+        <select class="input-field" [(ngModel)]="selectedCategory" (ngModelChange)="onCategoryChange()">
+          <option value="All">All genres</option>
+          @for (category of categories; track category) {
+            <option [value]="category">{{ category }}</option>
+          }
+        </select>
+      </label>
+    </div>
+
+    <div class="hero-pills">
+      <button type="button" class="btn-secondary">Editor's picks</button>
+      <button type="button" class="btn-ghost">Award winners</button>
+      <button type="button" class="btn-ghost">New arrivals</button>
+    </div>
+  </div>
+
+  <aside class="hero-featured">
+    <h3>Trending This Week</h3>
+    <app-featured-book-list [books]="featuredBooks"></app-featured-book-list>
+  </aside>
+</section>
+

@@ -1,0 +1,30 @@
+<!-- This file defines the HTML structure and semantic layout of the view. -->
+<div class="page-shell">
+  <app-navbar></app-navbar>
+
+  <app-hero-section
+    [featuredBooks]="featuredBooks"
+    [categories]="categories"
+    (searchChange)="onSearchChange($event)"
+    (categoryChange)="onCategoryChange($event)"
+  ></app-hero-section>
+
+  <section class="cart-summary" aria-label="Cart summary">
+    <div class="cart-icon-wrap" aria-hidden="true">🛒</div>
+    <div class="cart-meta">
+      <p>Cart</p>
+      <strong>{{ cartCount }} item{{ cartCount === 1 ? '' : 's' }}</strong>
+    </div>
+    <div class="cart-total">
+      <p>Total</p>
+      <strong>${{ cartTotal.toFixed(2) }}</strong>
+    </div>
+    <button type="button" class="btn-primary" [disabled]="cartCount === 0">Checkout</button>
+  </section>
+
+  <section class="main-layout">
+    <app-filters-sidebar (addBook)="onAddBook($event)"></app-filters-sidebar>
+    <app-catalog-grid [books]="books" (addToCart)="onAddToCart($event)"></app-catalog-grid>
+  </section>
+</div>
+

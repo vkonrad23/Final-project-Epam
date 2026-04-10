@@ -1,0 +1,14 @@
+<!-- This file defines the HTML structure and semantic layout of the view. -->
+<div class="featured-list">
+  @for (book of books; track book.id) {
+    <article class="featured-row">
+      <img class="cover" [src]="book.coverImage" [alt]="book.title + ' cover'" />
+      <div class="meta">
+        <h4>{{ book.title }}</h4>
+        <p>{{ book.author }}</p>
+      </div>
+      <span class="category">{{ book.category }}</span>
+    </article>
+  }
+</div>
+
